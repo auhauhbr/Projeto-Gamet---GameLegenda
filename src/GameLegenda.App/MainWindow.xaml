@@ -1,0 +1,129 @@
+<Window x:Class="GameLegenda.App.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:models="clr-namespace:GameLegenda.Core.Models;assembly=GameLegenda.Core"
+        Title="GameLegenda v0.1" Height="680" Width="1080" MinHeight="620" MinWidth="960"
+        Background="#111827" Foreground="#F9FAFB" KeyDown="OnWindowKeyDown">
+    <Window.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Padding" Value="14,9" />
+            <Setter Property="Margin" Value="0,0,10,0" />
+            <Setter Property="Background" Value="#2563EB" />
+            <Setter Property="Foreground" Value="#FFFFFF" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Cursor" Value="Hand" />
+        </Style>
+        <Style TargetType="TextBlock">
+            <Setter Property="TextWrapping" Value="Wrap" />
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="22">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Margin="0,0,0,18">
+            <TextBlock Text="GameLegenda" FontSize="34" FontWeight="Bold" />
+            <TextBlock Text="Protótipo técnico v0.1 - captura, OCR local, cache e overlay" Foreground="{StaticResource MutedTextBrush}" FontSize="15" />
+        </StackPanel>
+
+        <Border Grid.Row="1" Background="{StaticResource PanelBrush}" Padding="16" CornerRadius="8" Margin="0,0,0,16">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Orientation="Horizontal">
+                    <Button Content="Abrir janela de teste" Click="OnOpenTestWindowClick" />
+                    <Button x:Name="RefreshButton" Content="Atualizar janelas" Click="OnRefreshWindowsClick" Background="#374151" />
+                    <Button x:Name="CaptureButton" Content="Iniciar captura (F8)" Click="OnToggleCaptureClick" />
+                    <Button x:Name="OverlayButton" Content="Ocultar overlay (F9)" Click="OnToggleOverlayClick" Background="#374151" />
+                    <Button x:Name="AdjustOverlayButton" Content="Ajustar posição (F10)" Click="OnToggleAdjustOverlayClick" Background="#374151" />
+                </StackPanel>
+                <TextBlock Grid.Column="1" x:Name="StatusText" Text="Pronto" VerticalAlignment="Center" Foreground="#A7F3D0" />
+            </Grid>
+        </Border>
+
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="360" />
+                <ColumnDefinition Width="16" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Border Grid.Column="0" Background="{StaticResource PanelBrush}" Padding="14" CornerRadius="8">
+                <DockPanel>
+                    <TextBlock DockPanel.Dock="Top" Text="Janelas visíveis" FontSize="18" FontWeight="SemiBold" Margin="0,0,0,10" />
+                    <ListBox x:Name="WindowList" Background="#111827" Foreground="#F9FAFB" BorderBrush="#374151" BorderThickness="1">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate DataType="{x:Type models:WindowDescriptor}">
+                                <StackPanel Margin="6">
+                                    <TextBlock Text="{Binding Title}" FontWeight="SemiBold" />
+                                    <TextBlock Foreground="{StaticResource MutedTextBrush}" FontSize="12">
+                                        <Run Text="{Binding Width}" /><Run Text=" x " /><Run Text="{Binding Height}" />
+                                    </TextBlock>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </DockPanel>
+            </Border>
+
+            <Border Grid.Column="2" Background="{StaticResource PanelBrush}" Padding="16" CornerRadius="8">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Grid.Row="0" Margin="0,0,0,16">
+                        <TextBlock Text="Overlay do jogo" FontSize="18" FontWeight="SemiBold" />
+                        <TextBlock x:Name="OcrStatusText" Foreground="{StaticResource MutedTextBrush}" Text="Aguardando captura. As traduções aparecem apenas sobre a janela do jogo." />
+                    </StackPanel>
+
+                    <Border Grid.Row="1" Background="#111827" Padding="12" CornerRadius="6" Margin="0,0,0,16">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+
+                            <CheckBox x:Name="DeepLEnabledBox" Grid.Row="0" Grid.Column="0" Content="DeepL" VerticalAlignment="Center" Margin="0,0,10,8" />
+                            <PasswordBox x:Name="DeepLApiKeyBox" Grid.Row="0" Grid.Column="1" MinWidth="210" Margin="0,0,16,8" ToolTip="Chave da API DeepL" />
+                            <CheckBox x:Name="LibreEnabledBox" Grid.Row="0" Grid.Column="2" Content="Libre local" VerticalAlignment="Center" Margin="0,0,10,8" />
+                            <TextBox x:Name="LibreEndpointBox" Grid.Row="0" Grid.Column="3" MinWidth="230" Margin="0,0,16,8" />
+                            <Button Grid.Row="0" Grid.Column="4" Content="Aplicar" Click="OnApplyTranslationSettingsClick" Margin="0,0,0,8" />
+
+                            <TextBlock Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="5" x:Name="TranslationProviderStatusText"
+                                       Foreground="{StaticResource MutedTextBrush}"
+                                       Text="Ordem: cache/glossario, DeepL, LibreTranslate local, dicionario local." />
+                        </Grid>
+                    </Border>
+
+                    <Border Grid.Row="2" Background="#111827" Padding="12" CornerRadius="6">
+                        <DockPanel>
+                            <TextBlock DockPanel.Dock="Top" Text="Eventos" Foreground="{StaticResource MutedTextBrush}" Margin="0,0,0,8" />
+                            <ListBox x:Name="EventList" Background="#111827" Foreground="#E5E7EB" BorderThickness="0" />
+                        </DockPanel>
+                    </Border>
+                </Grid>
+            </Border>
+        </Grid>
+
+        <TextBlock Grid.Row="3" Margin="0,14,0,0" Foreground="{StaticResource MutedTextBrush}"
+                   Text="Atalhos: F8 liga/desliga captura, F9 mostra/oculta overlay, F10 ajusta posição, Esc para a captura ativa." />
+    </Grid>
+</Window>
