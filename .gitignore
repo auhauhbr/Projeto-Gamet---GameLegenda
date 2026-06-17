@@ -1,0 +1,8 @@
+bin/
+obj/
+.appdata/
+.localappdata/
+.vs/
+*.user
+*.suo
+ocr-synthetic-test.png

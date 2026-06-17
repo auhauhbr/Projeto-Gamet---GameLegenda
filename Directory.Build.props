@@ -1,0 +1,6 @@
+<Project>
+  <PropertyGroup>
+    <TargetPlatformSdkPath Condition="'$(TargetPlatformSdkPath)' == '' and '$(TargetPlatformIdentifier)' == 'Windows'">$(MSBuildThisFileDirectory)build\WindowsSdkPlaceholder\</TargetPlatformSdkPath>
+    <TargetPlatformDisplayName Condition="'$(TargetPlatformDisplayName)' == '' and '$(TargetPlatformIdentifier)' == 'Windows'">Windows</TargetPlatformDisplayName>
+  </PropertyGroup>
+</Project>
